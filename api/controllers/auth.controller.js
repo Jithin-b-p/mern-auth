@@ -17,9 +17,9 @@ export const signup = asyncWrapper(async (req, res, next) => {
 });
 
 export const signin = asyncWrapper(async (req, res, next) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
-  const user = await User.findOne({ username });
+  const user = await User.findOne({ email });
 
   const success = compareHashPassword(password, user.password);
 
