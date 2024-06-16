@@ -21,6 +21,8 @@ export const signin = asyncWrapper(async (req, res, next) => {
 
   const user = await User.findOne({ email });
 
+  if (!user) return next(createCustomError("invalid credentials!", 401));
+
   const success = compareHashPassword(password, user.password);
 
   if (!success) {

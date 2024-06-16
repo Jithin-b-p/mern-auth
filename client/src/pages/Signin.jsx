@@ -1,23 +1,31 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import {
+  signinStart,
+  signinSuccess,
+  signinError,
+} from "../redux/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+
 function Signin() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  const navigate = useNavigate();
+  const { loading, error } = useSelector((state) => state.user);
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      setLoading(true);
-      setError(false);
+      dispatch(signinError(false));
+      dispatch(signinStart());
+
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: {
@@ -26,16 +34,16 @@ function Signin() {
         body: JSON.stringify(formData),
       });
 
-      const data = await res.json();
+      const resJson = await res.json();
 
-      if (data.status === "failure") {
-        throw Error("something went wrong!");
+      dispatch(signinSuccess(resJson.data));
+      if (resJson.status === "failure") {
+        throw Error(resJson.message);
       }
-      setLoading(false);
+
       navigate("/");
     } catch (error) {
-      setError(true);
-      setLoading(false);
+      dispatch(signinError(error.message));
     }
   };
 
@@ -71,10 +79,10 @@ function Signin() {
         onChange={handleOnChange}
         disabled={loading}
       />
-      {error && (
-        <span className="block text-left text-red-700">
-          Something went wrong try again!
-        </span>
+      {error ? (
+        <span className="block text-left text-red-700">{error}</span>
+      ) : (
+        ""
       )}
       <button
         type="submit"
