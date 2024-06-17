@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import OAuthBtn from "../components/OAuthBtn";
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -94,9 +95,7 @@ function Signup() {
       >
         {loading ? "Loading..." : "Sign up"}
       </button>
-      <button className="px-3 py-2 font-medium text-white uppercase bg-red-600 rounded-md">
-        Continue with Google
-      </button>
+      <OAuthBtn />
 
       <span>
         Have an account?{" "}

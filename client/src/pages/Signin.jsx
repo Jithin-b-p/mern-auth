@@ -7,6 +7,7 @@ import {
   signinError,
 } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import OAuthBtn from "../components/OAuthBtn";
 
 function Signin() {
   const [formData, setFormData] = useState({
@@ -91,9 +92,7 @@ function Signin() {
       >
         {loading ? "Loading..." : "Sign in"}
       </button>
-      <button className="px-3 py-2 font-medium text-white uppercase bg-red-600 rounded-md">
-        Continue with Google
-      </button>
+      <OAuthBtn />
 
       <span>
         Don&apos;t have an account?{" "}
